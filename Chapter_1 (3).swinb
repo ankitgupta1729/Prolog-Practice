@@ -1,0 +1,623 @@
+<div class="notebook">
+
+<div class="nb-cell markdown" name="md1">
+## Chapter 1
+</div>
+
+<div class="nb-cell markdown" name="md2">
+Today's practitioner of Artificial Intelligence is handicapped unless thoroughly familiar with both Lisp and Prolog, for knowledge of the two principal languages of Artificial Intelligence is essential for a broad point of viewToday's practitioner of Artificial Intelligence is handicapped unless thoroughly familiar with both Lisp and Prolog, for knowledge of the two principal languages of Artificial Intelligence is essential for a broad point of view.
+</div>
+
+<div class="nb-cell markdown" name="md3">
+learning about goal-oriented programming through Lisp programs is like reading Shakespeare ina language other than English
+</div>
+
+<div class="nb-cell markdown" name="md4">
+an introduction to Prolog is important for all students of Computer Science, for there is no better way to see what the notion of whattype programming is all about.In particular, the chapters of this book clearly illustrate the difference between how-type and what-type thinking
+</div>
+
+<div class="nb-cell markdown" name="md5">
+## Part A: The Prolog Language
+</div>
+
+<div class="nb-cell markdown" name="md6">
+### Chapter 1: An overview of Prolog
+</div>
+
+<div class="nb-cell markdown" name="md7">
+Prolog is a programming language for symbolic, non-numeric computation. It is specially well suited for solving problems that involve objects and relations between objects. Figure 1.1 shows an example: a family relation.    
+The fact that Tom is a parent of Bob can be written in Prolog as:     
+parent( tom, bob).
+</div>
+
+<div class="nb-cell markdown" name="md8">
+Here we choose parent as the name of a relation; tom and bob are its arguments
+</div>
+
+<div class="nb-cell markdown" name="md9">
+#### Family Tree Program
+</div>
+
+<div class="nb-cell program" name="p1">
+parent( pam, bob).
+parent( tom, bob).
+parent( tom, liz).
+parent( bob, ann).
+parent( bob, pat).
+parent( pat, jim).
+</div>
+
+<div class="nb-cell markdown" name="md10">
+This program consists of six clauses. Each of these clauses declares one fact about the parent relation.
+</div>
+
+<div class="nb-cell query" name="q1">
+parent( bob, pat).
+</div>
+
+<div class="nb-cell query" name="q2">
+parent( liz, pat).
+</div>
+
+<div class="nb-cell query" name="q3">
+parent( tom, ben).
+</div>
+
+<div class="nb-cell query" name="q4">
+parent( X, liz).
+</div>
+
+<div class="nb-cell markdown" name="md11">
+Prolog's answer will not be just 'yes' or'no' this time. Prolog will tell us what is
+the (yet unknown) value of X such that the above statement is true
+</div>
+
+<div class="nb-cell query" name="q5">
+parent( bob, X)
+</div>
+
+<div class="nb-cell markdown" name="md12">
+We may now want to see other solutions. We can say that to Prolog (in most
+Prolog implementations by typing a semicolon), and Prolog will find other
+answer. If we request more solutions again, Prolog will answer 'no' because all the
+solutions have been exhausted
+</div>
+
+<div class="nb-cell markdown" name="md13">
+Our program can be asked an even broader question: Who is a parent of
+whom? Another formulation of this question is:
+Find X and Y such that X is a parent of Y.     
+This is expressed in Prolog by:
+</div>
+
+<div class="nb-cell query" name="q6">
+parent(X, Y).
+</div>
+
+<div class="nb-cell markdown" name="md14">
+We can stop the stream of solutions by typing, for example, a period instead of
+a semicolon (this depends on the implementation of Prolog).
+</div>
+
+<div class="nb-cell markdown" name="md15">
+Our example program can be asked still more complicated questions like:
+Who is a grandparent of Jim? As our program does not directly know the
+grandparent relation this query has to be broken down into two step    
+     
+(1) Who is a parent of Jim? Assume that this is some Y.     
+   
+(2) Who is a parent of Y? Assume that this is some X.
+</div>
+
+<div class="nb-cell query" name="q7">
+parent( Y, jim), parent( X, Y).
+</div>
+
+<div class="nb-cell markdown" name="md16">
+If we change the order of the two requirements the logical meaning remains the
+same
+</div>
+
+<div class="nb-cell query" name="q8">
+parent( X, Y), parent( Y, jim).
+</div>
+
+<div class="nb-cell markdown" name="md17">
+In a similar way we can ask: Who are Tom's grandchildren
+</div>
+
+<div class="nb-cell query" name="q9">
+parent( tom, X), parent( X, Y).
+</div>
+
+<div class="nb-cell markdown" name="md18">
+Yet another question could be: Do Ann and Pat have a common parent? This
+can be expressed again in two stePs:       
+      
+(1) Who is a parent, X, of Ann?     
+
+(2) Is (this same) X a parent of Pat?
+</div>
+
+<div class="nb-cell query" name="q10">
+parent( X, ann), parent( X, pat).
+</div>
+
+<div class="nb-cell markdown" name="md19">
+Our example program has helped to illustrate some important points:
+o It is easy in Prolog to define a relation, such as the parent relation, by
+stating the n-tuples of objects that satisfy the relation.    
+      
+(1)The user can easily query the Prolog system about relations defined in the program.        
+     
+
+(2)A Prolog program consists of clauses. Each clause terminates with a full
+stop.      
+     
+(3) The arguments of relations can (among other things) be: concrete
+objects, or constants (such as tom and ann), or general objects such as X
+and Y. Objects of the first kind in our program are called atoms. Objects
+of the second kind are called variables.     
+      
+(I) Questions to the system consist of one or more goals. A sequence of
+goals, such as
+parent( X, ann), parent( X, pat)
+means the conjunction of the goals:    
+    
+X is a parent of Ann, and     
+    
+X is a parent of Pat.     
+
+The word 'goals' is used because Prolog accepts questions as goals that
+are to be satisfied.      
+    
+(4) An answer to a question can be either positive or negative, depending on PROLOG PROGRAMMING FOR ARTIFICIAL INTELLIGENCE
+whether the corresponding goal can be satisfied or not. In the case of a
+positive answer we say that the corresponding goal was satisfiable and that the goalsucceeded. Otherwise the gbalwas unsatisfiable anditfailed.      
+    
+(5) If several answers satisfy the question then Prolog will find as many of
+them as desired by the user.
+</div>
+
+<div class="nb-cell markdown" name="md20">
+### 1.2 Extending the example program by rules
+</div>
+
+<div class="nb-cell markdown" name="md21">
+Our example program can be easily extended in many interesting ways. Let us
+first add the information on the sex of the people that occur in the parent
+relation. This can be done by simply adding the following facts to our program:
+</div>
+
+<div class="nb-cell program" name="p2">
+female( pam).
+male( tom).
+male( bob).
+female( liz).
+female( pat).
+female( ann).
+male( jim).
+</div>
+
+<div class="nb-cell query" name="q11">
+female(pat).
+</div>
+
+<div class="nb-cell markdown" name="md23">
+The relations introduced here are male and female. These relations are unary
+(or one-place) relations. A binary relation like parent defines a relation
+between pairs of objects; on the other hand, unary relations can be used to
+declare simple yes/no properties of objects. The first unary clause above can be
+read: Pam is a female. We could convey the same information declared in the
+two unary relations with one binary relation, sex, instead.
+</div>
+
+<div class="nb-cell markdown" name="md22">
+An alternative piece
+AN OVERVIEW OF PROLOG
+of program would then be:
+</div>
+
+<div class="nb-cell program" name="p3">
+sex( pam, feminine).
+sex( tom, masculine).
+sex( bob, masculine).
+</div>
+
+<div class="nb-cell query" name="q12">
+sex( pam, feminine).
+</div>
+
+<div class="nb-cell markdown" name="md24">
+As our next extension to the program let us introduce the offspring
+relation as the inverse of the parent relation. We could define offspring in a
+similar way as the parent relation; that is, by simply providing a list of simple
+facts about the offspring relation, each fact mentioning one pair of people such
+that one is an offspring of the other. For example
+</div>
+
+<div class="nb-cell program" name="p4">
+offspring( liz, tom)
+</div>
+
+<div class="nb-cell markdown" name="md25">
+However, the offspring relation can be defined much more elegantly by making
+use of the fact that it is the inverse of parent, and that parent has already been
+defined. This alternative way can be based on the following logical statement:
+</div>
+
+<div class="nb-cell program" name="p5">
+For all X and Y,
+	Y is an offspring of X if
+	X is a parent of Y.
+</div>
+
+<div class="nb-cell markdown" name="md26">
+This formulation is already close to the formalism of Prolog. The corresponding Prolog clause which has the same meaning is:
+</div>
+
+<div class="nb-cell program" name="p6">
+offspring( Y, X) :- parent( X, Y).
+</div>
+
+<div class="nb-cell markdown" name="md27">
+This clause can also be read as:
+</div>
+
+<div class="nb-cell program" name="p7">
+For all X and Y,
+	if X is a parent of Y then
+	Y is an offspring of X.
+</div>
+
+<div class="nb-cell markdown" name="md28">
+Prolog clauses such as
+</div>
+
+<div class="nb-cell program" data-singleline="true" name="p8">
+
+</div>
+
+<div class="nb-cell markdown" name="md29">
+are called rules. There is an important difference between facts and rules. A
+fact like
+</div>
+
+<div class="nb-cell markdown" name="md30">
+is something that is always, unconditionally, true. On the other hand, rules
+specify things that may be true if some condition is satisfied. Therefore we say
+that rules have:
+</div>
+
+<div class="nb-cell markdown" name="md31">
+1/ a condition part (the right-hand side of the rule) and    
+       
+2/ a conclusion part (the left-hand side of the rule).
+</div>
+
+<div class="nb-cell markdown" name="md32">
+The conclusion part is also called the headof a clause and the condition part the body of a clause. For example:     
+      
+offspring( y, X) :- parent( X, y).     
+     
+head             \\\\\\\        body     
+    
+If the condition parent( X, Y) is true then a logical consequence of this is offspring( Y, X).
+</div>
+
+<div class="nb-cell program" name="p10">
+parent( pam, bob).
+parent( tom, bob).
+parent( tom, liz).
+parent( bob, ann).
+parent( bob, pat).
+parent( pat, jim).
+
+offspring( Y, X) :- parent( X, Y).
+</div>
+
+<div class="nb-cell query" name="q13">
+offspring( liz, tom).
+</div>
+
+<div class="nb-cell markdown" name="md33">
+specification of the mother relation can be based on the following logical
+statement:     
+      
+For all X and Y.     
+    
+X is the mother of Y if     
+     
+X is a parent of Y and    
+   
+X is a female.
+</div>
+
+<div class="nb-cell program" name="p9">
+parent( pam, bob).
+parent( tom, bob).
+parent( tom, liz).
+parent( bob, ann).
+parent( bob, pat).
+parent( pat, jim).
+female( pam).
+female( liz).
+female( pat).
+female( ann).
+male( tom).
+male( bob).
+male( jim).
+offspring( Y, X) :- 
+    parent( X, Y).
+mother( X, Y) :- 
+    parent( X, Y),
+    female( X).
+grandparent(X, Z) :-
+	parent( X, Y),
+	parent( Y, Z).
+sister( X, Y):-
+	parent( Z,X),
+	parent( Z,Y),
+	female( X).
+</div>
+
+<div class="nb-cell html" name="htm1">
+
+</div>
+
+<div class="nb-cell markdown" name="md34">
+A comma between two conditions indicates the conjunction of the conditions,
+meaning that both conditions have to be true.
+</div>
+
+<div class="nb-cell query" name="q14">
+mother( X, jim)
+</div>
+
+<div class="nb-cell query" name="q15">
+sister( ann, pat).
+</div>
+
+<div class="nb-cell query" name="q16">
+sister( X, pat).
+</div>
+
+<div class="nb-cell markdown" name="md35">
+So, Pat is a sister to herself?! This is probably not what we had in mind when
+defining the sister relation. However, according to our rule about sisters
+Prolog's answer is perfectly logical. Our rule about sisters does not mention
+that X and Y must not be the same if X is to be a sister of Y. As this is not
+required Prolog (rightfully) assumes that X and Y can be the same, and will as a
+consequence find that any female who has a parent is a sister of herself
+</div>
+
+<div class="nb-cell markdown" name="md36">
+To correct our rule about sisters we have to add that X and Y must be
+different. We will see in later chapters how this can be done in several ways, but
+**for the moment we will assume that a relation different is already known to
+Prolog**
+</div>
+
+<div class="nb-cell program" name="p11">
+parent( pam, bob).
+parent( tom, bob).
+parent( tom, liz).
+parent( bob, ann).
+parent( bob, pat).
+parent( pat, jim).
+female( pam).
+female( liz).
+female( pat).
+female( ann).
+male( tom).
+male( bob).
+male( jim).
+offspring( Y, X) :- 
+    parent( X, Y).
+mother( X, Y) :- 
+    parent( X, Y),
+    female( X).
+grandparent(X, Z) :-
+	parent( X, Y),
+	parent( Y, Z).
+different(X, Y) :-
+    X = Y, !, fail ; true.
+sister( X, Y):-
+	parent( Z,X),
+	parent( Z,Y),
+	female( X),
+    different( X, Y).
+</div>
+
+<div class="nb-cell query" name="q17">
+sister( X, pat).
+</div>
+
+<div class="nb-cell markdown" name="md37">
+Some important points of this section are:     
+     
+1/ Prolog programs can be extended by simply adding new clauses.    
+   
+2/ Prolog clauses are of three types: facts, rules and questions.     
+    
+3/ Facts declare things that are always, unconditionally true.     
+    
+4/ Rules declare things that are true depending on a given condition.     
+     
+5/ By means of questions the user can ask the program what things are true.    
+     
+6/ Prolog clauses consist of the headand the body.The body is a list of" goals separated by commas. Commas are understood as conjunctions.     
+    
+    
+7/ Facts are clauses that have the empty body. Questions only have the
+body. Rules have the head and the (non-empty) body.    
+    
+8/ In the course of computation, a variable can be substituted by another
+object. we say that a variable becomes instantiated.     
+       
+9/ Variables are assumed to be universally quantified and are read as .for
+all'. Alternative readings are, however, possible for variables that appear only in the body. For example      
+     
+hasachild( X) :- parent( X, y).     
+     
+can be read in two ways:     
+    
+(a) For all X and Y,     
+    
+if X is a parent of Y then     
+    
+X has a child.     
+     
+(b) For all X,     
+     
+X has a child if     
+   
+there is some Y such that X is a parent of y.
+</div>
+
+<div class="nb-cell markdown" name="md38">
+### 1.3 A recursive rule definition
+</div>
+
+<div class="nb-cell markdown" name="md39">
+Let us add one more relation to our family program, the predecessorelation.
+This relation will be defined in terms of the parent relation. The whole
+definition can be expressed with two rules. The first rule will define the direct
+(immediate) predecessors and the second rule the indirect predecessors. We
+say that some X is an indirect predecessor of some Z if. there is a parentship
+chain of people between X and Z
+</div>
+
+<div class="nb-cell program" name="p12">
+parent( pam, bob).
+parent( tom, bob).
+parent( tom, liz).
+parent( bob, ann).
+parent( bob, pat).
+parent( pat, jim).
+
+/* direct predecessor (Base Condition)*/
+predecessor(X, Z) :-
+	parent( X, Z).
+/* indirect predecessor*/
+predecessor( X, Z) :-
+	parent( X, Y),
+	predecessor(Y, Z).
+</div>
+
+<div class="nb-cell query" name="q18">
+predecessor( pam, X).
+</div>
+
+<div class="nb-cell program" name="p13">
+parent( pam, bob). % Pam is a parent of Bob
+parent( tom, bob).
+parent( tom, liz).
+parent( bob, ann).
+parent( bob, pat).
+parent( pat, jim).
+female( pam). % Pam is female
+female( liz).
+female( pat).
+female( ann).
+male( tom). % Tom is male
+male( bob).
+male( jim).
+offspring( Y, X) :- 
+    parent( X, Y).
+mother( X, Y) :- 
+    parent( X, Y),
+    female( X).
+grandparent(X, Z) :-
+	parent( X, Y),
+	parent( Y, Z).
+different(X, Y) :-
+    X = Y, !, fail ; true.
+sister( X, Y):-
+	parent( Z,X),
+	parent( Z,Y),
+	female( X),
+    different( X, Y).
+/* direct predecessor (Base Condition)*/
+predecessor(X, Z) :-
+	parent( X, Z).
+/* indirect predecessor*/
+predecessor( X, Z) :-
+	parent( X, Y),
+	predecessor(Y, Z).
+</div>
+
+<div class="nb-cell markdown" name="md40">
+## 1.4 How Prolog answers question
+</div>
+
+<div class="nb-cell markdown" name="md41">
+A question to Prolog is always a sequence of one or more goals. To
+answer a question, Prolog tries to satisfy all the goals. What does it mean to
+satisfy a goal? To satisfy a goal means to demonstrate that the goal is true,   assuming that the relations in the program are true. In other words, to satisfy a
+goal means to demonstrate that the goal togically follows from the facts and
+rules in the program
+</div>
+
+<div class="nb-cell markdown" name="md42">
+. If the question containi variables, Prolog also has to find
+what are the particular objects (in place of variables) for wtriitr the goals are
+satisfied. The particular instantiation of variables to these objects is displayed
+to the user. If Prolog cannot demonstrate for some instantiation of vaiiables
+that the goals logically follow from the program, then Prolog's answer to the
+question will be 'no'.
+</div>
+
+<div class="nb-cell markdown" name="md43">
+An appropriate view of the interpretation of a Prolog program in
+mathematical terms is then as follows: Prolog accepts facts and rules as a set of
+axioms, and the user's question as a conjectured theorem;then it tries to prove
+this theorem - that is, to demonstrate that it can be logically derived from the
+axioms.
+</div>
+
+<div class="nb-cell markdown" name="md44">
+We will illustrate this view by a classical example. Let the axioms be:
+</div>
+
+<div class="nb-cell markdown" name="md45">
+All men are fallible.    
+    
+Socrates is a man.
+</div>
+
+<div class="nb-cell markdown" name="md46">
+A theorem that logically follows from these two axioms is:     
+     
+Socrates is fallible.
+</div>
+
+<div class="nb-cell markdown" name="md47">
+The first axiom above can be rewritten as:     
+      
+For all X, if X is a man then X is fallible.    
+     
+Accordingly, the example can be translated into Prolog as follows:
+</div>
+
+<div class="nb-cell program" name="p14">
+fallible( X) :- man( X). % All men are fallible
+man( socrates). % Socrates is a man
+</div>
+
+<div class="nb-cell query" name="q19">
+fallible(socrates) % Socrates is fallible?
+</div>
+
+<div class="nb-cell markdown" name="md48">
+. Instead of starting with simple facts given in the program, Prolog
+starts with the goals and, using rules, substitutes the current goals with new
+goals, until new goals happen to be simple facts
+</div>
+
+<div class="nb-cell markdown" name="md49">
+Prolog will try to satisfy this goal. In order to do so it will try to find a clause in
+the program from which the above goal could immediately'follow
+</div>
+
+</div>
